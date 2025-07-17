@@ -9,28 +9,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
+        /* --- Dark Blue Theme (Default) --- */
         :root {
-            --c-primary: #66FCF1;
-            --c-secondary: #45A29E;
-            --c-bg-primary: #0B0C10;
-            --c-bg-secondary: #1F2833;
-            --c-text-primary: #C5C6C7;
-            --c-text-secondary: #a0aec0;
-            --c-border: #45A29E;
-            --c-shadow-light: rgba(102, 252, 241, 0.2);
+            --c-primary: #3b82f6; 
+            --c-secondary: #60a5fa;
+            --c-bg-primary: #0f172a; /* Deep Navy Background */
+            --c-bg-secondary: #1e293b; /* Slightly Lighter Navy for Cards */
+            --c-text-primary: #e2e8f0; /* Light Grey/Off-White Text */
+            --c-text-secondary: #94a3b8; /* Muted Grey Text */
+            --c-border: #334155; /* Blue-Grey Border */
+            --c-shadow-light: rgba(59, 130, 246, 0.2);
             --c-shadow-heavy: rgba(0,0,0, 0.3);
         }
 
+        /* --- Light Blue Theme --- */
         html.light {
-            --c-primary: #45A29E;
-            --c-secondary: #66FCF1;
-            --c-bg-primary: #f3f4f6;
-            --c-bg-secondary: #ffffff;
-            --c-text-primary: #111827;
-            --c-text-secondary: #4b5563;
-            --c-border: #e2e8f0;
-            --c-shadow-light: rgba(0,0,0,0.05);
-            --c-shadow-heavy: rgba(0,0,0,0.1);
+            --c-primary: #3b82f6; /* Consistent Primary Blue */
+            --c-secondary: #60a5fa; /* Consistent Secondary Blue */
+            --c-bg-primary: #f0f9ff; /* Very Light Blue Background */
+            --c-bg-secondary: #ffffff; /* White Cards */
+            --c-text-primary: #0f172a; /* Dark Navy Text */
+            --c-text-secondary: #475569; /* Muted Blue-Grey Text */
+            --c-border: #dbeafe; /* Light Blue Border */
+            --c-shadow-light: rgba(59, 130, 246, 0.1);
+            --c-shadow-heavy: rgba(100, 116, 139, 0.15);
         }
 
         /* --- Base & App Container --- */
@@ -39,13 +41,13 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #1a1a1a;
+            background-color: #0b101c;
             font-family: 'Inter', system-ui, sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
         html.light body {
-             background-color: #e5e7eb;
+             background-color: #e0f2fe; /* Light sky blue outer background */
         }
 
         .mobile-app-container {
@@ -57,8 +59,8 @@
             flex-direction: column;
             background-color: var(--c-bg-primary);
             color: var(--c-text-primary);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            border-radius: 2.5rem;
+            box-shadow: 0 20px 60px var(--c-shadow-heavy);
+            border-radius: 1rem;
             overflow: hidden;
             position: relative;
         }
@@ -70,9 +72,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(180deg, var(--c-bg-secondary), var(--c-bg-primary));
+            background: var(--c-bg-secondary);
             border-bottom: 1px solid var(--c-border);
             position: relative;
+        }
+        html:not(.light) .app-header {
+            background: linear-gradient(180deg, var(--c-bg-secondary), var(--c-bg-primary));
         }
         .app-header h1 {
             font-size: 1.5rem;
@@ -80,8 +85,9 @@
             color: var(--c-primary);
         }
         html:not(.light) .app-header h1 {
-             text-shadow: 0 0 8px var(--c-shadow-light);
+            text-shadow: 0 0 10px var(--c-shadow-light), 1px 1px 2px rgba(0,0,0,0.3);
         }
+
 
         #themeToggle {
             position: absolute;
@@ -90,17 +96,12 @@
             transform: translateY(-50%);
             color: var(--c-text-secondary);
         }
-        html:not(.light) #themeToggle {
+        #themeToggle:hover {
             color: var(--c-primary);
         }
 
         /* --- Main Content & Views --- */
-        .app-main-content {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-            padding-bottom: 3rem;
-        }
+        .app-main-content { flex-grow: 1; overflow-y: auto; padding: 1.5rem; padding-bottom: 3rem; }
         .app-view { display: none; }
         .app-view.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -115,61 +116,55 @@
             border-top: 1px solid var(--c-border);
             box-shadow: 0 -5px 20px var(--c-shadow-heavy);
         }
-        .nav-button {
-            display: flex; flex-direction: column; align-items: center; background: none; border: none; cursor: pointer; padding: 0.25rem 0.5rem; color: var(--c-text-secondary); transition: color 0.3s ease, transform 0.2s ease; width: 70px;
-        }
+        .nav-button { display: flex; flex-direction: column; align-items: center; background: none; border: none; cursor: pointer; padding: 0.25rem 0.5rem; color: var(--c-text-secondary); transition: color 0.3s ease, transform 0.2s ease; width: 70px; }
         .nav-button:hover { transform: translateY(-2px); }
         .nav-button i { font-size: 1.4rem; margin-bottom: 0.25rem; transition: transform 0.3s ease; }
         .nav-button span { font-size: 0.7rem; font-weight: 600; }
         .nav-button.active { color: var(--c-primary); }
         .nav-button.active i { transform: scale(1.1); }
 
-        /* --- Common Styles --- */
-        .card {
-            background-color: var(--c-bg-secondary); border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 8px 25px var(--c-shadow-heavy); border: 1px solid var(--c-border);
-        }
+        /* --- Common Styles (Box Theme) --- */
+        .card { background-color: var(--c-bg-secondary); border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 4px 15px var(--c-shadow-heavy); border: 1px solid var(--c-border); }
         
-        input, textarea {
-            width: 100%; padding: 0.85rem; border-radius: 0.75rem; border: 1px solid var(--c-border); background-color: var(--c-bg-primary); color: var(--c-text-primary); transition: border-color 0.2s ease, box-shadow 0.2s ease; font-size: 1rem;
-        }
+        input, textarea { width: 100%; padding: 0.85rem; border-radius: 0.375rem; border: 1px solid var(--c-border); background-color: var(--c-bg-primary); color: var(--c-text-primary); transition: border-color 0.2s ease, box-shadow 0.2s ease; font-size: 1rem; }
         input::placeholder, textarea::placeholder { color: var(--c-text-secondary); }
         input:focus, textarea:focus { outline: none; border-color: var(--c-primary); box-shadow: 0 0 0 3px var(--c-shadow-light); }
         
-        .btn { padding: 0.85rem; border: none; border-radius: 0.75rem; font-weight: 700; font-size: 1rem; transition: all 0.3s ease; cursor: pointer; }
-        .btn-primary { width: 100%; color: #0B0C10; background: linear-gradient(135deg, var(--c-primary), var(--c-secondary)); box-shadow: 0 4px 15px var(--c-shadow-light); }
+        .btn { padding: 0.85rem; border: none; border-radius: 0.375rem; font-weight: 700; font-size: 1rem; transition: all 0.3s ease; cursor: pointer; }
+        .btn-primary { width: 100%; color: #FFFFFF; background: linear-gradient(135deg, var(--c-primary), var(--c-secondary)); box-shadow: 0 4px 15px var(--c-shadow-light); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 7px 20px var(--c-shadow-heavy); }
         .btn-danger { background-color: #ef4444; color: white; }
-        .btn-secondary { background-color: #6b7280; color: white; }
+        .btn-secondary { background-color: #64748b; color: white; }
 
-        .output-card { margin-bottom: 1.5rem; background-color: var(--c-bg-secondary); border-radius: 1rem; border: 1px solid var(--c-border); overflow: hidden; }
-        .output-card-header { padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; background-color: rgba(102, 252, 241, 0.05); }
-        html.light .output-card-header { background-color: rgba(0,0,0,0.02); }
+        .output-card { margin-bottom: 1.5rem; background-color: var(--c-bg-secondary); border-radius: 0.5rem; border: 1px solid var(--c-border); overflow: hidden; }
+        .output-card-header { padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; background-color: rgba(59, 130, 246, 0.08); }
+        html.light .output-card-header { background-color: transparent; border-bottom: 1px solid var(--c-border); }
         .output-card-body { padding: 1.25rem; font-size: 0.95rem; color: var(--c-text-secondary); }
-        .copy-output-btn { background-color: var(--c-bg-primary); border: 1px solid var(--c-border); color: var(--c-text-secondary); padding: 0.25rem 0.6rem; border-radius: 0.5rem; font-size: 0.8rem; transition: all 0.2s ease; }
-        .copy-output-btn:hover { background-color: var(--c-primary); color: var(--c-bg-primary); border-color: var(--c-primary); }
+        .copy-output-btn { background-color: var(--c-bg-primary); border: 1px solid var(--c-border); color: var(--c-text-secondary); padding: 0.25rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; transition: all 0.2s ease; }
+        .copy-output-btn:hover { background-color: var(--c-primary); color: var(--c-bg-secondary); border-color: var(--c-primary); }
         
         /* --- Dashboard View --- */
-        .dashboard-stat-card { border-radius: 1.5rem; padding: 2rem; text-align: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); position: relative; overflow: hidden; transition: transform 0.3s; background: rgba(31, 40, 51, 0.5); border: 1px solid rgba(102, 252, 241, 0.25); }
-        html.light .dashboard-stat-card { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(0,0,0,0.1); }
+        .dashboard-stat-card { border-radius: 0.75rem; padding: 2rem; text-align: center; position: relative; overflow: hidden; transition: transform 0.3s; background: var(--c-bg-secondary); border: 1px solid var(--c-border); box-shadow: 0 4px 15px var(--c-shadow-heavy); }
+        html:not(.light) .dashboard-stat-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         .dashboard-stat-card:hover { transform: scale(1.03); }
-        .dashboard-stat-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(102, 252, 241, 0.25) 0%, rgba(102, 252, 241, 0) 45%); animation: rotateGlow 10s linear infinite; }
+        .dashboard-stat-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--c-shadow-light) 0%, transparent 45%); animation: rotateGlow 10s linear infinite; }
         html.light .dashboard-stat-card::before { background: none; }
         .dashboard-stat-card h3 { font-size: 2.75rem; font-weight: 800; line-height: 1; color: var(--c-primary); }
-        html:not(.light) .dashboard-stat-card h3 { text-shadow: 0 0 12px var(--c-primary); }
+        html:not(.light) .dashboard-stat-card h3 { text-shadow: 0 0 12px var(--c-shadow-light); }
         .dashboard-stat-card p { margin-top: 0.5rem; font-size: 1rem; color: var(--c-text-secondary); font-weight: 500; }
 
         /* --- Creations View --- */
-        .creation-item { background-color: var(--c-bg-secondary); border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--c-border); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .creation-item { background-color: var(--c-bg-secondary); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--c-border); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
         .creation-item:hover { transform: translateY(-4px); box-shadow: 0 10px 20px var(--c-shadow-heavy); }
         
         /* --- Modal Styles --- */
         .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 50; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0s 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; transition-delay: 0s; }
-        .modal-content { background-color: var(--c-bg-secondary); border-radius: 1.5rem; width: 90%; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transform: scale(0.95); opacity: 0; transition: transform 0.3s, opacity 0.3s; border: 1px solid var(--c-border); }
+        .modal-content { background-color: var(--c-bg-secondary); border-radius: 0.75rem; width: 90%; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transform: scale(0.95); opacity: 0; transition: transform 0.3s, opacity 0.3s; border: 1px solid var(--c-border); }
         .modal-overlay.active .modal-content { transform: scale(1); opacity: 1; }
         .modal-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--c-border); }
         .modal-body { padding: 1.5rem; max-height: 60vh; overflow-y: auto; color: var(--c-text-secondary); }
-        .modal-body h3 { color: var(--c-primary); }
+        .modal-body h3 { color: var(--c-primary); font-weight: 700; }
         .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--c-border); display: flex; gap: 0.5rem; }
 
         /* Scrollbar */
@@ -184,7 +179,7 @@
         <!-- App Header -->
         <header class="app-header">
             <h1>HaldarIQ</h1>
-            <button id="themeToggle" class="p-2 rounded-full" aria-label="Toggle theme">
+            <button id="themeToggle" class="p-2 rounded-md" aria-label="Toggle theme">
                 <i class="fas fa-sun text-lg"></i>
                 <i class="fas fa-moon text-lg hidden"></i>
             </button>
@@ -199,23 +194,23 @@
                     <form id="contentForm" class="space-y-4">
                         <div>
                             <label for="videoTopic" class="text-sm font-medium text-muted mb-1 block">Topic / Idea :-</label>
-                            <input type="text" id="videoTopic" required placeholder=" Your Video Title">
+                            <input type="text" id="videoTopic" required placeholder="e.g., The Future of AI">
                         </div>
                         <div>
                             <label for="videoLength" class="text-sm font-medium text-muted mb-1 block">Length (mins) :-</label>
-                            <input type="number" id="videoLength" min="1" required placeholder=" Video Length Time">
+                            <input type="number" id="videoLength" min="1" required placeholder="e.g., 10">
                         </div>
                         <div>
                             <label for="videoDescription" class="text-sm font-medium text-muted mb-1 block">Description :-</label>
-                            <textarea id="videoDescription" rows="3" required placeholder=" Video Description Future AI Trends"></textarea>
+                            <textarea id="videoDescription" rows="3" required placeholder="A video exploring upcoming AI trends..."></textarea>
                         </div>
                         <button type="submit" id="generateButton" class="btn btn-primary flex items-center justify-center space-x-2">
-                            <i class="fas fa-bolt"></i>
+                            <i class="fas fa-rocket"></i>
                             <span>Generate Content</span>
                         </button>
                     </form>
                 </div>
-                <div id="loader" class="text-center my-4 hidden"><div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div></div>
+                <div id="loader" class="text-center my-4 hidden"><div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent text-primary"></div></div>
                 <div id="outputSection" class="mt-6 hidden">
                     <div class="output-card">
                         <div class="output-card-header">
@@ -267,7 +262,7 @@
                  <div class="card">
                     <h2 class="text-xl font-bold mb-2">About This App</h2>
                     <p class="text-sm text-muted">
-                        HaldarIQ 💡 is an AI-powered tool designed to help creators quickly generate SEO-optimized titles, detailed descriptions, and relevant tags for their videos. All data is saved locally on your device.
+                        HaldarIQ 🚀 is an AI-powered tool designed to help creators quickly generate SEO-optimized titles, detailed descriptions, and relevant tags for their videos. All data is saved locally on your device.
                     </p>
                 </div>
                 <div class="card">
@@ -330,212 +325,249 @@
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-24 z-50 p-3 rounded-lg text-white font-semibold shadow-lg opacity-0 transition-opacity duration-300"></div>
+    <div id="toast" class="fixed bottom-24 z-50 p-3 rounded-md text-white font-semibold shadow-lg opacity-0 transition-opacity duration-300"></div>
 
 <script>
-    // --- THEME ---
-    const themeToggle = document.getElementById('themeToggle');
-    const htmlElement = document.documentElement;
-    const sunIcon = themeToggle.querySelector('.fa-sun');
-    const moonIcon = themeToggle.querySelector('.fa-moon');
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- THEME ---
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const sunIcon = themeToggle.querySelector('.fa-sun');
+        const moonIcon = themeToggle.querySelector('.fa-moon');
 
-    function applyTheme(theme) {
-        htmlElement.classList.remove('light', 'dark');
-        htmlElement.classList.add(theme);
-        sunIcon.classList.toggle('hidden', theme === 'dark');
-        moonIcon.classList.toggle('hidden', theme === 'light');
-    }
-    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    applyTheme(savedTheme);
-
-    themeToggle.addEventListener('click', () => {
-        const newTheme = htmlElement.classList.contains('dark') ? 'light' : 'dark';
-        applyTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-    });
-    
-    // --- VIEW NAVIGATION ---
-    const navButtons = document.querySelectorAll('.nav-button');
-    const views = document.querySelectorAll('.app-view');
-
-    function switchView(targetViewId) {
-        views.forEach(view => view.classList.toggle('active', view.id === `view-${targetViewId}`));
-        navButtons.forEach(button => button.classList.toggle('active', button.dataset.viewTarget === targetViewId));
-        if (targetViewId === 'dashboard') renderDashboard();
-        if (targetViewId === 'creations') renderCreations();
-    }
-
-    navButtons.forEach(button => button.addEventListener('click', () => switchView(button.dataset.viewTarget)));
-
-    // --- API & FORM ---
-    const contentForm = document.getElementById('contentForm');
-    const generateButton = document.getElementById('generateButton');
-    const loader = document.getElementById('loader');
-    const outputSection = document.getElementById('outputSection');
-    const GEMINI_API_KEY = "AIzaSyCDB33oQz7zI569nQMm0LDK2gy7J59D1NU";
-    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
-    
-    // --- LOCAL STORAGE & DATA HANDLING ---
-    const STORAGE_KEY = 'promptMindsCreations';
-    const getCreations = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    const saveCreations = (creations) => localStorage.setItem(STORAGE_KEY, JSON.stringify(creations));
-
-    // --- RENDER FUNCTIONS ---
-    function renderDashboard() {
-        const creations = getCreations();
-        document.getElementById('dashboardCreationsCount').textContent = creations.length;
-        const totalWords = creations.reduce((acc, c) => acc + (c.title?.split(' ').length || 0) + (c.description?.split(' ').length || 0) + (c.tags?.split(',').length || 0), 0);
-        document.getElementById('dashboardWordsCount').textContent = totalWords.toLocaleString();
-    }
-
-    function renderCreations() {
-        const creationsContainer = document.getElementById('creationsContainer');
-        const creations = getCreations();
-        if (creations.length === 0) {
-            creationsContainer.innerHTML = `<p class="text-center text-muted">No creations saved yet.</p>`;
-            return;
+        function applyTheme(theme) {
+            htmlElement.classList.remove('light', 'dark');
+            htmlElement.classList.add(theme);
+            sunIcon.classList.toggle('hidden', theme === 'dark');
+            moonIcon.classList.toggle('hidden', theme === 'light');
+            localStorage.setItem('theme', theme);
         }
-        creationsContainer.innerHTML = creations.map(c => `
-            <div class="creation-item" onclick="showCreationDetail(${c.id})">
-                <h4 class="font-semibold break-words">${c.topic || 'Untitled'}</h4>
-                <p class="text-sm text-muted">${new Date(c.id).toLocaleDateString()}</p>
-            </div>
-        `).join('');
-    }
 
-    // --- MODAL & DELETION LOGIC ---
-    let confirmAction = null;
-    const confirmBtn = document.getElementById('confirmBtn');
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
 
-    function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
-    function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
+        themeToggle.addEventListener('click', () => {
+            const newTheme = htmlElement.classList.contains('dark') ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
 
-    function showCreationDetail(id) {
-        const creation = getCreations().find(c => c.id === id);
-        if (!creation) return;
-        
-        document.getElementById('creationDetailTopic').textContent = creation.topic;
-        document.getElementById('creationDetailBody').innerHTML = `
-            <div><h3 class="font-bold mb-1">Title</h3><p>${creation.title}</p></div>
-            <div><h3 class="font-bold mb-1">Description</h3><p class="whitespace-pre-wrap">${creation.description}</p></div>
-            <div><h3 class="font-bold mb-1">Tags</h3><p>${creation.tags}</p></div>
-            <button onclick="handleDeleteCreation(${id})" class="btn btn-danger w-full mt-4">Delete this Creation</button>
-        `;
+        // --- VIEW NAVIGATION ---
+        const navButtons = document.querySelectorAll('.nav-button');
+        const views = document.querySelectorAll('.app-view');
 
-        document.getElementById('copyAllBtn').onclick = () => copyAllCreationContent(creation);
-        openModal('creationDetailModal');
-    }
-
-    function handleDeleteCreation(id) {
-        closeModal('creationDetailModal');
-        document.getElementById('confirmModalTitle').textContent = 'Confirm Deletion';
-        document.getElementById('confirmModalText').textContent = 'Are you sure you want to permanently delete this creation? This action cannot be undone.';
-        confirmAction = () => {
-            let creations = getCreations();
-            saveCreations(creations.filter(c => c.id !== id));
-            renderCreations();
-            closeModal('confirmDeleteModal');
-            showToast('Creation deleted!', 'success');
-        };
-        openModal('confirmDeleteModal');
-    }
-
-    document.getElementById('resetAllButton').addEventListener('click', () => {
-        document.getElementById('confirmModalTitle').textContent = 'Confirm Reset';
-        document.getElementById('confirmModalText').textContent = 'Are you sure you want to delete ALL saved data? This is permanent.';
-        confirmAction = () => {
-            saveCreations([]);
-            renderCreations();
-            closeModal('confirmDeleteModal');
-            showToast('All data has been reset.', 'success');
-        };
-        openModal('confirmDeleteModal');
-    });
-
-    confirmBtn.addEventListener('click', () => {
-        if (typeof confirmAction === 'function') {
-            confirmAction();
-            confirmAction = null;
+        function switchView(targetViewId) {
+            views.forEach(view => view.classList.toggle('active', view.id === `view-${targetViewId}`));
+            navButtons.forEach(button => button.classList.toggle('active', button.dataset.viewTarget === targetViewId));
+            
+            if (targetViewId === 'dashboard') renderDashboard();
+            if (targetViewId === 'creations') renderCreations();
         }
-    });
 
-    function copyAllCreationContent(creation) {
-        const text = `TITLE:\n${creation.title}\n\nDESCRIPTION:\n${creation.description}\n\nTAGS:\n${creation.tags}`;
-        navigator.clipboard.writeText(text).then(() => showToast('Content copied!'));
-    }
+        navButtons.forEach(button => button.addEventListener('click', () => switchView(button.dataset.viewTarget)));
 
-    // --- FORM LOGIC ---
-    contentForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const videoTopic = document.getElementById('videoTopic').value;
-        loader.classList.remove('hidden');
-        outputSection.classList.add('hidden');
-        generateButton.disabled = true;
+        // --- API & FORM ---
+        const contentForm = document.getElementById('contentForm');
+        const generateButton = document.getElementById('generateButton');
+        const loader = document.getElementById('loader');
+        const outputSection = document.getElementById('outputSection');
+        const GEMINI_API_KEY = "AIzaSyCDB33oQz7zI569nQMm0LDK2gy7J59D1NU"; // IMPORTANT: Replace with your actual key
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
-        const prompt = `Generate YouTube metadata for a video with topic: "${videoTopic}", length: ${document.getElementById('videoLength').value} minutes, and description: "${document.getElementById('videoDescription').value}". Format output as: ---YOUTUBE_TITLE_START---[Title]---YOUTUBE_TITLE_END--- ---YOUTUBE_DESCRIPTION_START---[Description with timestamps, queries, hashtags]---YOUTUBE_DESCRIPTION_END--- ---SEO_TAGS_START---[Comma-separated tags]---SEO_TAGS_END---`;
+        // --- LOCAL STORAGE & DATA HANDLING ---
+        const STORAGE_KEY = 'haldarIQCreations';
+        const getCreations = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        const saveCreations = (creations) => localStorage.setItem(STORAGE_KEY, JSON.stringify(creations));
 
-        try {
-            const response = await fetch(GEMINI_API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-            if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
-            const data = await response.json();
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-            if (text) {
-                const title = (text.match(/---YOUTUBE_TITLE_START---([\s\S]*?)---YOUTUBE_TITLE_END---/)?.[1] || '').trim();
-                const description = (text.match(/---YOUTUBE_DESCRIPTION_START---([\s\S]*?)---YOUTUBE_DESCRIPTION_END---/)?.[1] || '').trim();
-                const tags = (text.match(/---SEO_TAGS_START---([\s\S]*?)---SEO_TAGS_END---/)?.[1] || '').trim();
-                
-                document.getElementById('youtubeTitleOutput').textContent = title;
-                document.getElementById('youtubeDescriptionOutput').innerHTML = description.replace(/\n/g, '<br>');
-                document.getElementById('seoTagsOutput').textContent = tags;
-
-                const creations = getCreations();
-                creations.unshift({ id: Date.now(), topic: videoTopic, title, description, tags });
-                saveCreations(creations);
-                
-                outputSection.classList.remove('hidden');
-                showToast('Content generated successfully!');
-            } else { throw new Error('Invalid API response.'); }
-        } catch (error) {
-            showToast(`Error: ${error.message}`, 'error');
-        } finally {
-            loader.classList.add('hidden');
-            generateButton.disabled = false;
+        // --- RENDER FUNCTIONS ---
+        function renderDashboard() {
+            const creations = getCreations();
+            document.getElementById('dashboardCreationsCount').textContent = creations.length;
+            const totalWords = creations.reduce((acc, c) => acc + (c.title?.split(' ').length || 0) + (c.description?.split(' ').length || 0) + (c.tags?.split(',').length || 0), 0);
+            document.getElementById('dashboardWordsCount').textContent = totalWords.toLocaleString();
         }
-    });
 
-    // --- INDIVIDUAL COPY BUTTONS ---
-    document.querySelectorAll('.copy-output-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.stopPropagation(); 
-            const targetSelector = button.dataset.clipboardTarget;
-            const targetElement = document.querySelector(targetSelector);
-            if (targetElement) {
-                navigator.clipboard.writeText(targetElement.innerText).then(() => {
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = '<i class="fas fa-check"></i>';
-                    setTimeout(() => {
-                        button.innerHTML = originalHTML;
-                    }, 2000);
-                    showToast('Copied to clipboard!');
-                }).catch(err => {
-                    showToast('Failed to copy.', 'error');
-                });
+        function renderCreations() {
+            const creationsContainer = document.getElementById('creationsContainer');
+            const creations = getCreations();
+            creationsContainer.innerHTML = ''; // Clear previous entries
+            if (creations.length === 0) {
+                creationsContainer.innerHTML = `<p class="text-center text-muted">No creations saved yet.</p>`;
+                return;
+            }
+            creations.sort((a, b) => b.id - a.id).forEach(c => { // Sort by most recent
+                const item = document.createElement('div');
+                item.className = 'creation-item';
+                item.innerHTML = `
+                    <h4 class="font-semibold break-words">${c.topic || 'Untitled'}</h4>
+                    <p class="text-sm text-muted">${new Date(c.id).toLocaleDateString()}</p>
+                `;
+                item.onclick = () => showCreationDetail(c.id);
+                creationsContainer.appendChild(item);
+            });
+        }
+
+        // --- MODAL & DELETION LOGIC ---
+        let confirmAction = null;
+        const confirmBtn = document.getElementById('confirmBtn');
+        const creationDetailModal = document.getElementById('creationDetailModal');
+        const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+
+        window.openModal = (modalId) => document.getElementById(modalId).classList.add('active');
+        window.closeModal = (modalId) => document.getElementById(modalId).classList.remove('active');
+
+        window.showCreationDetail = (id) => {
+            const creation = getCreations().find(c => c.id === id);
+            if (!creation) return;
+
+            document.getElementById('creationDetailTopic').textContent = creation.topic;
+            document.getElementById('creationDetailBody').innerHTML = `
+                <div><h3 class="font-bold mb-1">Title</h3><p>${creation.title}</p></div>
+                <div><h3 class="font-bold mb-1 mt-3">Description</h3><p class="whitespace-pre-wrap">${creation.description}</p></div>
+                <div><h3 class="font-bold mb-1 mt-3">Tags</h3><p>${creation.tags}</p></div>
+                <button id="deleteSingleCreationBtn" class="btn btn-danger w-full mt-4">Delete this Creation</button>
+            `;
+            
+            document.getElementById('deleteSingleCreationBtn').onclick = () => handleDeleteCreation(id);
+            document.getElementById('copyAllBtn').onclick = () => copyAllCreationContent(creation);
+            openModal('creationDetailModal');
+        }
+
+        function handleDeleteCreation(id) {
+            closeModal('creationDetailModal');
+            document.getElementById('confirmModalTitle').textContent = 'Confirm Deletion';
+            document.getElementById('confirmModalText').textContent = 'Are you sure you want to permanently delete this creation? This action cannot be undone.';
+            confirmAction = () => {
+                let creations = getCreations();
+                saveCreations(creations.filter(c => c.id !== id));
+                renderCreations();
+                closeModal('confirmDeleteModal');
+                showToast('Creation deleted!', 'success');
+            };
+            openModal('confirmDeleteModal');
+        }
+
+        document.getElementById('resetAllButton').addEventListener('click', () => {
+            document.getElementById('confirmModalTitle').textContent = 'Confirm Reset';
+            document.getElementById('confirmModalText').textContent = 'Are you sure you want to delete ALL saved data? This is permanent.';
+            confirmAction = () => {
+                saveCreations([]);
+                renderCreations();
+                renderDashboard();
+                closeModal('confirmDeleteModal');
+                showToast('All data has been reset.', 'success');
+            };
+            openModal('confirmDeleteModal');
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            if (typeof confirmAction === 'function') {
+                confirmAction();
+                confirmAction = null;
             }
         });
-    });
 
-    // --- TOAST NOTIFICATION ---
-    function showToast(message, type = 'success') {
+        function copyAllCreationContent(creation) {
+            const text = `TITLE:\n${creation.title}\n\nDESCRIPTION:\n${creation.description}\n\nTAGS:\n${creation.tags}`;
+            navigator.clipboard.writeText(text).then(() => showToast('All content copied!'));
+        }
+
+        // --- FORM LOGIC ---
+        contentForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const videoTopic = document.getElementById('videoTopic').value;
+            loader.classList.remove('hidden');
+            outputSection.classList.add('hidden');
+            generateButton.disabled = true;
+
+            const prompt = `Generate YouTube metadata for a video.
+            - TOPIC: "${videoTopic}"
+            - LENGTH: ${document.getElementById('videoLength').value} minutes
+            - KEY POINTS: "${document.getElementById('videoDescription').value}"
+            
+            Format the output strictly as follows, with no extra text before or after these sections:
+            ---YOUTUBE_TITLE_START---
+            [Generate a catchy, SEO-friendly YouTube title here]
+            ---YOUTUBE_TITLE_END---
+            ---YOUTUBE_DESCRIPTION_START---
+            [Generate a detailed YouTube description. Include a summary, timestamps (if applicable based on length), related links placeholder, and relevant hashtags at the end]
+            ---YOUTUBE_DESCRIPTION_END---
+            ---SEO_TAGS_START---
+            [Generate a comma-separated list of 20-30 highly relevant SEO tags for the video]
+            ---SEO_TAGS_END---`;
+
+            try {
+                const response = await fetch(GEMINI_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `API Error: ${response.statusText}`);
+                }
+                const data = await response.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (text) {
+                    const title = (text.match(/---YOUTUBE_TITLE_START---([\s\S]*?)---YOUTUBE_TITLE_END---/)?.[1] || 'Title could not be generated.').trim();
+                    const description = (text.match(/---YOUTUBE_DESCRIPTION_START---([\s\S]*?)---YOUTUBE_DESCRIPTION_END---/)?.[1] || 'Description could not be generated.').trim();
+                    const tags = (text.match(/---SEO_TAGS_START---([\s\S]*?)---SEO_TAGS_END---/)?.[1] || 'Tags could not be generated.').trim();
+
+                    document.getElementById('youtubeTitleOutput').textContent = title;
+                    document.getElementById('youtubeDescriptionOutput').innerHTML = description.replace(/\n/g, '<br>');
+                    document.getElementById('seoTagsOutput').textContent = tags;
+
+                    const creations = getCreations();
+                    creations.unshift({ id: Date.now(), topic: videoTopic, title, description, tags });
+                    saveCreations(creations);
+                    
+                    outputSection.classList.remove('hidden');
+                    showToast('Content generated successfully!', 'success');
+                } else {
+                    throw new Error('Invalid API response structure.');
+                }
+            } catch (error) {
+                showToast(`Error: ${error.message}`, 'error');
+            } finally {
+                loader.classList.add('hidden');
+                generateButton.disabled = false;
+            }
+        });
+
+        // --- INDIVIDUAL COPY BUTTONS ---
+        document.querySelectorAll('.copy-output-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetSelector = button.dataset.clipboardTarget;
+                const targetElement = document.querySelector(targetSelector);
+                if (targetElement) {
+                    navigator.clipboard.writeText(targetElement.innerText).then(() => {
+                        const originalHTML = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+                        setTimeout(() => {
+                            button.innerHTML = originalHTML;
+                        }, 2000);
+                        showToast('Copied to clipboard!');
+                    }).catch(err => {
+                        showToast('Failed to copy.', 'error');
+                    });
+                }
+            });
+        });
+
+        // --- TOAST NOTIFICATION ---
         const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.className = `fixed bottom-24 z-50 p-3 rounded-lg text-white font-semibold shadow-lg opacity-0 transition-opacity duration-300 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
-        toast.classList.remove('opacity-0');
-        setTimeout(() => toast.classList.add('opacity-0'), 3000);
-    }
-    
-    // --- INITIALIZATION ---
-    switchView('generator');
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `fixed bottom-24 z-50 p-3 rounded-md text-white font-semibold shadow-lg opacity-0 transition-opacity duration-300 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 3000);
+        }
+
+        // --- INITIALIZATION ---
+        switchView('generator');
+    });
 </script>
 
 </body>
