@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>HaldarIQ</title>
+   <link rel="icon" type="image/x-icon" href="/file_000000009dd461f782dfc44f1f661347.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        /* --- Dark Blue Theme (Default) --- */
+        :root {
+            --c-primary: #3b82f6; 
+            --c-secondary: #60a5fa;
+            --c-bg-primary: #0f172a; /* Deep Navy Background */
+            --c-bg-secondary: #1e293b; /* Slightly Lighter Navy for Cards */
+            --c-text-primary: #e2e8f0; /* Light Grey/Off-White Text */
+            --c-text-secondary: #94a3b8; /* Muted Grey Text */
+            --c-border: #334155; /* Blue-Grey Border */
+            --c-shadow-light: rgba(59, 130, 246, 0.2);
+            --c-shadow-heavy: rgba(0,0,0, 0.3);
+        }
+
+        /* --- Light Blue Theme --- */
+        html.light {
+            --c-primary: #3b82f6; /* Consistent Primary Blue */
+            --c-secondary: #60a5fa; /* Consistent Secondary Blue */
+            --c-bg-primary: #f0f9ff; /* Very Light Blue Background */
+            --c-bg-secondary: #ffffff; /* White Cards */
+            --c-text-primary: #0f172a; /* Dark Navy Text */
+            --c-text-secondary: #475569; /* Muted Blue-Grey Text */
+            --c-border: #dbeafe; /* Light Blue Border */
+            --c-shadow-light: rgba(59, 130, 246, 0.1);
+            --c-shadow-heavy: rgba(100, 116, 139, 0.15);
+        }
+
+        /* --- Base & App Container --- */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0b101c;
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        html.light body {
+             background-color: #e0f2fe; /* Light sky blue outer background */
+        }
+
+        .mobile-app-container {
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            max-height: 900px;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--c-bg-primary);
+            color: var(--c-text-primary);
+            box-shadow: 0 20px 60px var(--c-shadow-heavy);
+            border-radius: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        .app-header {
+            flex-shrink: 0;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--c-bg-secondary);
+            border-bottom: 1px solid var(--c-border);
+            position: relative;
+        }
+        html:not(.light) .app-header {
+            background: linear-gradient(180deg, var(--c-bg-secondary), var(--c-bg-primary));
+        }
+        .app-header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--c-primary);
+        }
+        html:not(.light) .app-header h1 {
+            text-shadow: 0 0 10px var(--c-shadow-light), 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+
+        #themeToggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--c-text-secondary);
+        }
+        #themeToggle:hover {
+            color: var(--c-primary);
+        }
+
+        /* --- Main Content & Views --- */
+        .app-main-content { flex-grow: 1; overflow-y: auto; padding: 1.5rem; padding-bottom: 3rem; }
+        .app-view { display: none; }
+        .app-view.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Bottom Navigation --- */
+        .bottom-nav {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            background-color: var(--c-bg-secondary);
+            border-top: 1px solid var(--c-border);
+            box-shadow: 0 -5px 20px var(--c-shadow-heavy);
+        }
+        .nav-button { display: flex; flex-direction: column; align-items: center; background: none; border: none; cursor: pointer; padding: 0.25rem 0.5rem; color: var(--c-text-secondary); transition: color 0.3s ease, transform 0.2s ease; width: 70px; }
+        .nav-button:hover { transform: translateY(-2px); }
+        .nav-button i { font-size: 1.4rem; margin-bottom: 0.25rem; transition: transform 0.3s ease; }
+        .nav-button span { font-size: 0.7rem; font-weight: 600; }
+        .nav-button.active { color: var(--c-primary); }
+        .nav-button.active i { transform: scale(1.1); }
+
+        /* --- Common Styles (Box Theme) --- */
+        .card { background-color: var(--c-bg-secondary); border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 4px 15px var(--c-shadow-heavy); border: 1px solid var(--c-border); }
+        
+        input, textarea, select { width: 100%; padding: 0.85rem; border-radius: 0.375rem; border: 1px solid var(--c-border); background-color: var(--c-bg-primary); color: var(--c-text-primary); transition: border-color 0.2s ease, box-shadow 0.2s ease; font-size: 1rem; }
+        input::placeholder, textarea::placeholder { color: var(--c-text-secondary); }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--c-primary); box-shadow: 0 0 0 3px var(--c-shadow-light); }
+        select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; }
+        html.light select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); }
+
+
+        .btn { padding: 0.85rem; border: none; border-radius: 0.375rem; font-weight: 700; font-size: 1rem; transition: all 0.3s ease; cursor: pointer; }
+        .btn-primary { width: 100%; color: #FFFFFF; background: linear-gradient(135deg, var(--c-primary), var(--c-secondary)); box-shadow: 0 4px 15px var(--c-shadow-light); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 7px 20px var(--c-shadow-heavy); }
+        .btn-danger { background-color: #ef4444; color: white; }
+        .btn-secondary { background-color: #64748b; color: white; }
+
+        .output-card { margin-bottom: 1.5rem; background-color: var(--c-bg-secondary); border-radius: 0.5rem; border: 1px solid var(--c-border); overflow: hidden; }
+        .output-card-header { padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; background-color: rgba(59, 130, 246, 0.08); }
+        html.light .output-card-header { background-color: transparent; border-bottom: 1px solid var(--c-border); }
+        .output-card-body { padding: 1.25rem; font-size: 0.95rem; color: var(--c-text-secondary); }
+        .copy-output-btn { background-color: var(--c-bg-primary); border: 1px solid var(--c-border); color: var(--c-text-secondary); padding: 0.25rem 0.6rem; border-radius: 0.25rem; font-size: 0.8rem; transition: all 0.2s ease; }
+        .copy-output-btn:hover { background-color: var(--c-primary); color: var(--c-bg-secondary); border-color: var(--c-primary); }
+        
+        /* --- Dashboard View --- */
+        .dashboard-stat-card { border-radius: 0.75rem; padding: 2rem; text-align: center; position: relative; overflow: hidden; transition: transform 0.3s; background: var(--c-bg-secondary); border: 1px solid var(--c-border); box-shadow: 0 4px 15px var(--c-shadow-heavy); }
+        html:not(.light) .dashboard-stat-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .dashboard-stat-card:hover { transform: scale(1.03); }
+        .dashboard-stat-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, var(--c-shadow-light) 0%, transparent 45%); animation: rotateGlow 10s linear infinite; }
+        html.light .dashboard-stat-card::before { background: none; }
+        .dashboard-stat-card h3 { font-size: 2.75rem; font-weight: 800; line-height: 1; color: var(--c-primary); }
+        html:not(.light) .dashboard-stat-card h3 { text-shadow: 0 0 12px var(--c-shadow-light); }
+        .dashboard-stat-card p { margin-top: 0.5rem; font-size: 1rem; color: var(--c-text-secondary); font-weight: 500; }
+
+        /* --- Creations View --- */
+        .creation-item { background-color: var(--c-bg-secondary); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--c-border); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .creation-item:hover { transform: translateY(-4px); box-shadow: 0 10px 20px var(--c-shadow-heavy); }
+        
+        /* --- Modal Styles --- */
+        .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 50; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0s 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; transition-delay: 0s; }
+        .modal-content { background-color: var(--c-bg-secondary); border-radius: 0.75rem; width: 90%; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transform: scale(0.95); opacity: 0; transition: transform 0.3s, opacity 0.3s; border: 1px solid var(--c-border); }
+        .modal-overlay.active .modal-content { transform: scale(1); opacity: 1; }
+        .modal-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--c-border); }
+        .modal-body { padding: 1.5rem; max-height: 60vh; overflow-y: auto; color: var(--c-text-secondary); }
+        .modal-body h3 { color: var(--c-primary); font-weight: 700; }
+        .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--c-border); display: flex; gap: 0.5rem; }
+
+        /* Scrollbar */
+        .app-main-content::-webkit-scrollbar, .modal-body::-webkit-scrollbar { width: 6px; }
+        .app-main-content::-webkit-scrollbar-track, .modal-body::-webkit-scrollbar-track { background: transparent; }
+        .app-main-content::-webkit-scrollbar-thumb, .modal-body::-webkit-scrollbar-thumb { background: var(--c-text-secondary); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <h1>HaldarIQ</h1>
+            <button id="themeToggle" class="p-2 rounded-md" aria-label="Toggle theme">
+                <i class="fas fa-sun text-lg"></i>
+                <i class="fas fa-moon text-lg hidden"></i>
+            </button>
+        </header>
+
+        <!-- Main Content Area (for views) -->
+        <main class="app-main-content">
+            <!-- Generator View -->
+            <section id="view-generator" class="app-view">
+                <div class="card space-y-4">
+                    <h2 class="text-2xl font-bold text-center">Content Generator</h2>
+                    <form id="contentForm" class="space-y-4">
+                        <div>
+                            <label for="contentType" class="text-sm font-medium text-muted mb-1 block">Content Type :-</label>
+                            <select id="contentType" required>
+                                <option value="youtube_long">YouTube Long Video</option>
+                                <option value="youtube_short">YouTube Short</option>
+                                <option value="instagram_post">Instagram Post</option>
+                                <option value="instagram_reel">Instagram Reel</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="videoTopic" class="text-sm font-medium text-muted mb-1 block">Topic / Idea :-</label>
+                            <input type="text" id="videoTopic" required placeholder="e.g., The Future of AI">
+                        </div>
+                        <div id="videoLengthContainer">
+                            <label for="videoLength" class="text-sm font-medium text-muted mb-1 block">Length (mins) :-</label>
+                            <!-- **** FIX 1: Removed 'required' attribute from this input **** -->
+                            <input type="number" id="videoLength" min="1" placeholder="e.g., 10">
+                        </div>
+                        <div>
+                            <label for="videoDescription" class="text-sm font-medium text-muted mb-1 block">Key Points / Description :-</label>
+                            <textarea id="videoDescription" rows="3" required placeholder="e.g., A video exploring upcoming AI trends..."></textarea>
+                        </div>
+                        <button type="submit" id="generateButton" class="btn btn-primary flex items-center justify-center space-x-2">
+                            <i class="fas fa-rocket"></i>
+                            <span>Generate Content</span>
+                        </button>
+                    </form>
+                </div>
+                <div id="loader" class="text-center my-4 hidden"><div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent text-primary"></div></div>
+                
+                <!-- Dynamic Output Section -->
+                <div id="outputSection" class="mt-6 hidden">
+                    <!-- This will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="app-view">
+                <div class="space-y-6">
+                    <div class="dashboard-stat-card">
+                        <h3 id="dashboardCreationsCount">0</h3>
+                        <p>Total Creations</p>
+                    </div>
+                    <div class="dashboard-stat-card">
+                        <h3 id="dashboardWordsCount">0</h3>
+                        <p>Approx. Words Generated</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Creations View -->
+            <section id="view-creations" class="app-view">
+                <div id="creationsContainer">
+                    <!-- Creations will be injected here -->
+                </div>
+            </section>
+
+            <!-- Settings View -->
+            <section id="view-settings" class="app-view space-y-6">
+                 <div class="card">
+                    <h2 class="text-xl font-bold mb-2">About This App</h2>
+                    <p class="text-sm text-muted">
+                        HaldarIQ 🚀 is an AI-powered tool designed to help creators quickly generate SEO-optimized content for YouTube and Instagram. All data is saved locally on your device.
+                    </p>
+                </div>
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-2">Danger Zone</h2>
+                    <p class="text-sm text-muted mb-4">
+                       This will permanently delete all your saved creations. This action cannot be undone.
+                    </p>
+                    <button id="resetAllButton" class="btn btn-danger w-full">Reset All Data</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <button class="nav-button" data-view-target="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-button active" data-view-target="generator">
+                <i class="fas fa-magic"></i>
+                <span>Generator</span>
+            </button>
+            <button class="nav-button" data-view-target="creations">
+                <i class="fas fa-folder-open"></i>
+                <span>Creations</span>
+            </button>
+            <button class="nav-button" data-view-target="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Modals -->
+    <div id="creationDetailModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="creationDetailTopic" class="text-lg font-bold">Creation Details</h2>
+            </div>
+            <div id="creationDetailBody" class="modal-body space-y-4"></div>
+            <div class="modal-footer">
+                <button id="copyAllBtn" class="btn btn-primary w-full">Copy All</button>
+                <button onclick="closeModal('creationDetailModal')" class="btn btn-secondary w-full">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="confirmDeleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="confirmModalTitle" class="text-lg font-bold">Confirm Action</h2>
+            </div>
+            <div class="modal-body">
+                <p id="confirmModalText">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmBtn" class="btn btn-danger w-full">Confirm</button>
+                <button onclick="closeModal('confirmDeleteModal')" class="btn btn-secondary w-full">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-24 z-50 p-3 rounded-md text-white font-semibold shadow-lg opacity-0 transition-opacity duration-300"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- THEME ---
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const sunIcon = themeToggle.querySelector('.fa-sun');
+        const moonIcon = themeToggle.querySelector('.fa-moon');
+
+        function applyTheme(theme) {
+            htmlElement.classList.remove('light', 'dark');
+            htmlElement.classList.add(theme);
+            sunIcon.classList.toggle('hidden', theme === 'dark');
+            moonIcon.classList.toggle('hidden', theme === 'light');
+            localStorage.setItem('theme', theme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const newTheme = htmlElement.classList.contains('dark') ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+
+        // --- VIEW NAVIGATION ---
+        const navButtons = document.querySelectorAll('.nav-button');
+        const views = document.querySelectorAll('.app-view');
+
+        function switchView(targetViewId) {
+            views.forEach(view => view.classList.toggle('active', view.id === `view-${targetViewId}`));
+            navButtons.forEach(button => button.classList.toggle('active', button.dataset.viewTarget === targetViewId));
+            
+            if (targetViewId === 'dashboard') renderDashboard();
+            if (targetViewId === 'creations') renderCreations();
+        }
+
+        navButtons.forEach(button => button.addEventListener('click', () => switchView(button.dataset.viewTarget)));
+
+        // --- DYNAMIC FORM & API ---
+        const contentForm = document.getElementById('contentForm');
+        const generateButton = document.getElementById('generateButton');
+        const loader = document.getElementById('loader');
+        const outputSection = document.getElementById('outputSection');
+        const contentTypeSelect = document.getElementById('contentType');
+        const videoLengthContainer = document.getElementById('videoLengthContainer');
+
+        contentTypeSelect.addEventListener('change', (e) => {
+            const type = e.target.value;
+            videoLengthContainer.style.display = type === 'youtube_long' ? 'block' : 'none';
+        });
+
+        const GEMINI_API_KEY = "AIzaSyAfeG4rlD65WkwOzk3TY-5-tDW2bdDDZuo"; // IMPORTANT: Replace with your actual Google AI Studio API key
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+
+        // --- LOCAL STORAGE & DATA HANDLING ---
+        const STORAGE_KEY = 'haldarIQCreations_v2';
+        const getCreations = () => JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        const saveCreations = (creations) => localStorage.setItem(STORAGE_KEY, JSON.stringify(creations));
+
+        // --- RENDER FUNCTIONS ---
+        function renderDashboard() {
+            const creations = getCreations();
+            document.getElementById('dashboardCreationsCount').textContent = creations.length;
+            const totalWords = creations.reduce((acc, c) => {
+                let count = 0;
+                if(c.data.title) count += c.data.title.split(' ').length;
+                if(c.data.description) count += c.data.description.split(' ').length;
+                if(c.data.tags) count += c.data.tags.split(',').length;
+                if(c.data.caption) count += c.data.caption.split(' ').length;
+                if(c.data.hashtags) count += c.data.hashtags.split(',').length;
+                return acc + count;
+            }, 0);
+            document.getElementById('dashboardWordsCount').textContent = totalWords.toLocaleString();
+        }
+
+        function renderCreations() {
+            const creationsContainer = document.getElementById('creationsContainer');
+            const creations = getCreations();
+            creationsContainer.innerHTML = ''; // Clear previous entries
+            if (creations.length === 0) {
+                creationsContainer.innerHTML = `<p class="text-center text-muted">No creations saved yet.</p>`;
+                return;
+            }
+            creations.sort((a, b) => b.id - a.id).forEach(c => { // Sort by most recent
+                const item = document.createElement('div');
+                item.className = 'creation-item';
+                
+                const typeMap = {
+                    'youtube_long': {icon: 'fab fa-youtube', text: 'YouTube Video'},
+                    'youtube_short': {icon: 'fas fa-mobile-alt', text: 'YouTube Short'},
+                    'instagram_post': {icon: 'fab fa-instagram', text: 'Instagram Post'},
+                    'instagram_reel': {icon: 'fas fa-film', text: 'Instagram Reel'}
+                };
+                const typeInfo = typeMap[c.type] || {icon: 'fas fa-file', text: 'Creation'};
+
+                item.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="flex-grow">
+                            <h4 class="font-semibold break-words">${c.topic || 'Untitled'}</h4>
+                            <p class="text-sm text-muted">${new Date(c.id).toLocaleDateString()}</p>
+                        </div>
+                        <div class="flex-shrink-0 ml-4 text-right">
+                             <i class="${typeInfo.icon} text-lg text-primary"></i>
+                             <p class="text-xs text-muted">${typeInfo.text}</p>
+                        </div>
+                    </div>
+                `;
+                item.onclick = () => showCreationDetail(c.id);
+                creationsContainer.appendChild(item);
+            });
+        }
+        
+        // --- MODAL & DELETION LOGIC ---
+        let confirmAction = null;
+        const confirmBtn = document.getElementById('confirmBtn');
+
+        window.openModal = (modalId) => document.getElementById(modalId).classList.add('active');
+        window.closeModal = (modalId) => document.getElementById(modalId).classList.remove('active');
+
+        window.showCreationDetail = (id) => {
+            const creation = getCreations().find(c => c.id === id);
+            if (!creation) return;
+
+            document.getElementById('creationDetailTopic').textContent = creation.topic;
+            let bodyHtml = '';
+            
+            if (creation.type === 'youtube_long' || creation.type === 'youtube_short') {
+                 bodyHtml = `
+                    <div><h3 class="font-bold mb-1">Title</h3><p>${creation.data.title}</p></div>
+                    <div><h3 class="font-bold mb-1 mt-3">Description</h3><p class="whitespace-pre-wrap">${creation.data.description}</p></div>
+                    <div><h3 class="font-bold mb-1 mt-3">Tags</h3><p>${creation.data.tags}</p></div>`;
+            } else if (creation.type === 'instagram_post' || creation.type === 'instagram_reel') {
+                 bodyHtml = `
+                    <div><h3 class="font-bold mb-1">Caption</h3><p class="whitespace-pre-wrap">${creation.data.caption}</p></div>
+                    <div><h3 class="font-bold mb-1 mt-3">Hashtags</h3><p>${creation.data.hashtags}</p></div>`;
+            }
+             bodyHtml += `<button id="deleteSingleCreationBtn" class="btn btn-danger w-full mt-4">Delete this Creation</button>`;
+            
+            document.getElementById('creationDetailBody').innerHTML = bodyHtml;
+            document.getElementById('deleteSingleCreationBtn').onclick = () => handleDeleteCreation(id);
+            document.getElementById('copyAllBtn').onclick = () => copyAllCreationContent(creation);
+            openModal('creationDetailModal');
+        }
+
+        function handleDeleteCreation(id) {
+            closeModal('creationDetailModal');
+            document.getElementById('confirmModalTitle').textContent = 'Confirm Deletion';
+            document.getElementById('confirmModalText').textContent = 'Are you sure you want to permanently delete this creation? This action cannot be undone.';
+            confirmAction = () => {
+                let creations = getCreations();
+                saveCreations(creations.filter(c => c.id !== id));
+                renderCreations();
+                renderDashboard();
+                closeModal('confirmDeleteModal');
+                showToast('Creation deleted!', 'success');
+            };
+            openModal('confirmDeleteModal');
+        }
+
+        document.getElementById('resetAllButton').addEventListener('click', () => {
+            document.getElementById('confirmModalTitle').textContent = 'Confirm Reset';
+            document.getElementById('confirmModalText').textContent = 'Are you sure you want to delete ALL saved data? This is permanent.';
+            confirmAction = () => {
+                saveCreations([]);
+                renderCreations();
+                renderDashboard();
+                closeModal('confirmDeleteModal');
+                showToast('All data has been reset.', 'success');
+            };
+            openModal('confirmDeleteModal');
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            if (typeof confirmAction === 'function') {
+                confirmAction();
+                confirmAction = null;
+            }
+        });
+
+        function copyAllCreationContent(creation) {
+            let text = '';
+             if (creation.type.startsWith('youtube')) {
+                text = `TITLE:\n${creation.data.title}\n\nDESCRIPTION:\n${creation.data.description}\n\nTAGS:\n${creation.data.tags}`;
+            } else if (creation.type.startsWith('instagram')) {
+                text = `CAPTION:\n${creation.data.caption}\n\nHASHTAGS:\n${creation.data.hashtags}`;
+            }
+            navigator.clipboard.writeText(text).then(() => showToast('All content copied!'));
+        }
+        
+        // --- PROMPT ENGINEERING ---
+        function getPrompt(type, topic, length, description) {
+            const baseInfo = `
+                - TOPIC: "${topic}"
+                - KEY POINTS: "${description}"
+            `;
+            switch(type) {
+                case 'youtube_long':
+                    return `Generate YouTube metadata for a long-form video.
+                        ${baseInfo}
+                        - LENGTH: ${length} minutes
+                        
+                        Format the output strictly as follows, with no extra text before or after these sections:
+                        ---YOUTUBE_TITLE_START---
+                        [Generate a catchy, SEO-friendly YouTube title here. It should be compelling and reflect the topic.]
+                        ---YOUTUBE_TITLE_END---
+                        ---YOUTUBE_DESCRIPTION_START---
+                        [Generate a detailed YouTube description. Include a summary, timestamps (based on the provided length and key points), placeholder for related links, and 3-5 relevant hashtags at the end.]
+                        ---YOUTUBE_DESCRIPTION_END---
+                        ---SEO_TAGS_START---
+                        [Generate a comma-separated list of 20-30 highly relevant SEO tags for the video.]
+                        ---SEO_TAGS_END---`;
+                case 'youtube_short':
+                     return `Generate YouTube Short metadata.
+                        ${baseInfo}
+                        - LENGTH: Under 60 seconds
+                        
+                        Format the output strictly as follows:
+                        ---YOUTUBE_TITLE_START---
+                        [Generate a short, punchy, and highly engaging title for a YouTube Short. Must include #Shorts.]
+                        ---YOUTUBE_TITLE_END---
+                        ---YOUTUBE_DESCRIPTION_START---
+                        [Generate a very brief, one or two-sentence description including 3-5 relevant hashtags.]
+                        ---YOUTUBE_DESCRIPTION_END---
+                        ---SEO_TAGS_START---
+                        [Generate a comma-separated list of 10-15 relevant SEO tags, including "shorts", "youtubeshorts".]
+                        ---SEO_TAGS_END---`;
+                case 'instagram_post':
+                    return `Generate content for an Instagram Post.
+                        ${baseInfo}
+                        
+                        Format the output strictly as follows:
+                        ---INSTAGRAM_CAPTION_START---
+                        [Generate an engaging and SEO-friendly Instagram caption. It should be well-formatted with paragraphs and emojis, include a strong hook, provide value based on the key points, and end with a clear call-to-action (e.g., asking a question, encouraging saves/shares).]
+                        ---INSTAGRAM_CAPTION_END---
+                        ---INSTagram_HASHTAGS_START---
+                        [Generate a comma-separated list of 20-25 relevant hashtags. Include a mix of broad, niche-specific, and community hashtags.]
+                        ---INSTAGRAM_HASHTAGS_END---`;
+                case 'instagram_reel':
+                     return `Generate content for an Instagram Reel.
+                        ${baseInfo}
+                        
+                        Format the output strictly as follows:
+                        ---INSTAGRAM_CAPTION_START---
+                        [Generate a short, snappy, and SEO-friendly Instagram Reel caption. Include a hook, brief context, and a call-to-action. Use relevant keywords.]
+                        ---INSTAGRAM_CAPTION_END---
+                        ---INSTAGRAM_HASHTAGS_START---
+                        [Generate a comma-separated list of 15-20 highly relevant and trending hashtags for Reels.]
+                        ---INSTAGRAM_HASHTAGS_END---`;
+                default:
+                    return '';
+            }
+        }
+
+
+        // --- FORM LOGIC (SUBMISSION HANDLER) ---
+        contentForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const contentType = document.getElementById('contentType').value;
+            const videoTopic = document.getElementById('videoTopic').value;
+            const videoLength = document.getElementById('videoLength').value;
+            const videoDescription = document.getElementById('videoDescription').value;
+
+            // **** FIX 2: Added smart validation for the length field ****
+            if (contentType === 'youtube_long' && !videoLength) {
+                showToast('Please enter a video length for long videos.', 'error');
+                return; // Stop the function if length is missing for a long video
+            }
+
+            loader.classList.remove('hidden');
+            outputSection.classList.add('hidden');
+            generateButton.disabled = true;
+            
+            if (GEMINI_API_KEY === "YOUR_API_KEY") {
+                showToast("Error: Please add your API Key in the script.", 'error');
+                loader.classList.add('hidden');
+                generateButton.disabled = false;
+                return;
+            }
+
+            const prompt = getPrompt(contentType, videoTopic, videoLength, videoDescription);
+            if (!prompt) {
+                showToast('Invalid content type selected.', 'error');
+                loader.classList.add('hidden');
+                generateButton.disabled = false;
+                return;
+            }
+
+            try {
+                const response = await fetch(GEMINI_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `API Error: ${response.statusText}`);
+                }
+                const data = await response.json();
+
+                if (!data.candidates || data.candidates.length === 0) {
+                    let errorMessage = 'API did not return a valid response.';
+                    if (data.promptFeedback?.blockReason) {
+                        errorMessage = `Request was blocked: ${data.promptFeedback.blockReason}. Try rephrasing your topic.`;
+                    }
+                    throw new Error(errorMessage);
+                }
+                
+                const text = data.candidates[0]?.content?.parts[0]?.text;
+
+                if (text) {
+                    let creationData = {};
+                    let outputHtml = '';
+
+                    if (contentType.startsWith('youtube')) {
+                        const title = (text.match(/---YOUTUBE_TITLE_START---([\s\S]*?)---YOUTUBE_TITLE_END---/)?.[1] || '').trim();
+                        const description = (text.match(/---YOUTUBE_DESCRIPTION_START---([\s\S]*?)---YOUTUBE_DESCRIPTION_END---/)?.[1] || '').trim();
+                        const tags = (text.match(/---SEO_TAGS_START---([\s\S]*?)---SEO_TAGS_END---/)?.[1] || '').trim();
+                        
+                        if (!title && !description && !tags) {
+                            throw new Error("AI failed to generate content in the correct format. Please try again.");
+                        }
+
+                        creationData = { 
+                            title: title || "Title could not be generated.", 
+                            description: description || "Description could not be generated.", 
+                            tags: tags || "Tags could not be generated." 
+                        };
+                        outputHtml = `
+                            <div class="output-card">
+                                <div class="output-card-header"><h3 class="font-bold"><i class="fas fa-lightbulb mr-2"></i>Title</h3><button class="copy-output-btn" data-clipboard-target="#output1"><i class="fas fa-copy"></i></button></div>
+                                <div class="output-card-body"><p id="output1" class="whitespace-pre-wrap">${creationData.title}</p></div>
+                            </div>
+                            <div class="output-card">
+                                <div class="output-card-header"><h3 class="font-bold"><i class="fas fa-align-left mr-2"></i>Description</h3><button class="copy-output-btn" data-clipboard-target="#output2"><i class="fas fa-copy"></i></button></div>
+                                <div class="output-card-body"><div id="output2" class="whitespace-pre-wrap">${creationData.description.replace(/\n/g, '<br>')}</div></div>
+                            </div>
+                            <div class="output-card">
+                                <div class="output-card-header"><h3 class="font-bold"><i class="fas fa-tags mr-2"></i>Tags</h3><button class="copy-output-btn" data-clipboard-target="#output3"><i class="fas fa-copy"></i></button></div>
+                                <div class="output-card-body"><p id="output3" class="whitespace-pre-wrap">${creationData.tags}</p></div>
+                            </div>
+                        `;
+                    } else if (contentType.startsWith('instagram')) {
+                        const caption = (text.match(/---INSTAGRAM_CAPTION_START---([\s\S]*?)---INSTAGRAM_CAPTION_END---/)?.[1] || '').trim();
+                        const hashtags = (text.match(/---INSTAGRAM_HASHTAGS_START---([\s\S]*?)---INSTAGRAM_HASHTAGS_END---/)?.[1] || '').trim();
+
+                        if (!caption && !hashtags) {
+                             throw new Error("AI failed to generate content in the correct format. Please try again.");
+                        }
+                        
+                        creationData = { 
+                            caption: caption || "Caption could not be generated.", 
+                            hashtags: hashtags || "Hashtags could not be generated."
+                        };
+                         outputHtml = `
+                            <div class="output-card">
+                                <div class="output-card-header"><h3 class="font-bold"><i class="fas fa-closed-captioning mr-2"></i>Caption</h3><button class="copy-output-btn" data-clipboard-target="#output1"><i class="fas fa-copy"></i></button></div>
+                                <div class="output-card-body"><p id="output1" class="whitespace-pre-wrap">${creationData.caption.replace(/\n/g, '<br>')}</p></div>
+                            </div>
+                            <div class="output-card">
+                                <div class="output-card-header"><h3 class="font-bold"><i class="fas fa-hashtag mr-2"></i>Hashtags</h3><button class="copy-output-btn" data-clipboard-target="#output2"><i class="fas fa-copy"></i></button></div>
+                                <div class="output-card-body"><div id="output2" class="whitespace-pre-wrap">${creationData.hashtags}</div></div>
+                            </div>
+                        `;
+                    }
+                    
+                    outputSection.innerHTML = outputHtml;
+                    const creations = getCreations();
+                    creations.unshift({ id: Date.now(), topic: videoTopic, type: contentType, data: creationData });
+                    saveCreations(creations);
+                    
+                    outputSection.classList.remove('hidden');
+                    addCopyButtonListeners();
+                    showToast('Content generated successfully!', 'success');
+                } else {
+                    throw new Error('API returned an empty response part.');
+                }
+            } catch (error) {
+                showToast(`Error: ${error.message}`, 'error');
+            } finally {
+                loader.classList.add('hidden');
+                generateButton.disabled = false;
+            }
+        });
+
+        // --- INDIVIDUAL COPY BUTTONS ---
+        function addCopyButtonListeners() {
+            document.querySelectorAll('.copy-output-btn').forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+                newButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const targetSelector = newButton.dataset.clipboardTarget;
+                    const targetElement = document.querySelector(targetSelector);
+                    if (targetElement) {
+                        navigator.clipboard.writeText(targetElement.innerText).then(() => {
+                            const originalHTML = newButton.innerHTML;
+                            newButton.innerHTML = '<i class="fas fa-check text-green-500"></i>';
+                            setTimeout(() => { newButton.innerHTML = originalHTML; }, 2000);
+                            showToast('Copied to clipboard!');
+                        }).catch(err => {
+                            showToast('Failed to copy.', 'error');
+                        });
+                    }
+                });
+            });
+        }
+
+        // --- TOAST NOTIFICATION ---
+        const toast = document.getElementById('toast');
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `fixed bottom-24 z-50 p-3 rounded-md text-white font-semibold shadow-lg opacity-0 transition-opacity duration-300 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => toast.classList.add('opacity-0'), 3000);
+        }
+
+        // --- INITIALIZATION ---
+        switchView('generator');
+        contentTypeSelect.dispatchEvent(new Event('change'));
+    });
+</script>
+
+</body>
+</html>
