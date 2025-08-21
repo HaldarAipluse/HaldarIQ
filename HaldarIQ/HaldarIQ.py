@@ -7,7 +7,7 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 # --- CONFIGURATION ---
 # PASTE YOUR NEW, SECRET KEYS IN THE QUOTATION MARKS BELOW
 TELEGRAM_BOT_TOKEN = "8006163294:AAFtqfOMOmgpRd1yCURZNDJ8-r9tgydrXNg"
-GEMINI_API_KEY = "AIzaSyCs8tS8wOtbRXbVQR5foAMch1vYFnBp6_0"
+GEMINI_API_KEY = "AIzaSyCddPYpOxsqy0Z1pgE4WzgK6vttg3WLuF8"
 
 # --- In-Memory Storage ---
 user_generated_content = {}
